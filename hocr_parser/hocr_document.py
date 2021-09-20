@@ -1,5 +1,5 @@
-from typing import Iterable, List, Optional
 import warnings
+from typing import Iterable, List, Optional
 
 from .bbox import BBox
 from .exceptions import EncodingError, EmptyDocumentException, MissingRequiredMetaField
@@ -7,10 +7,12 @@ from .hocr_node import HOCRNode
 
 
 class HOCRDocument:
-    def __init__(self, filename: str, encoding: str = "utf-8"):
+    def __init__(self, data: str, encoding: str = "utf-8", is_file: bool = False):
         """Creates a new HOCRDocument instance from the HOCR file `filename`
 
-        :param filename: Filename of the input HOCR document
+        :param data: HOCR data. Can be filename if 'is_file' is set to 'True'
+        :param is_file: Specifies if data is a file path. Will read the content of the file path if this param is set
+        to 'True'
         :param encoding: (optional) Encoding to be for the document.
             Default is utf-8.
         :raises EncodingError: When opening the file with the given encoding
@@ -18,7 +20,8 @@ class HOCRDocument:
         :raises EmptyDocumentException: When the given file is empty
         """
         # try to open the file with the given encoding
-        data = self._read_file(filename, encoding)
+        if is_file:
+            data = self._read_file(data, encoding)
 
         # if no data was read, the document is empty
         if len(data) == 0:

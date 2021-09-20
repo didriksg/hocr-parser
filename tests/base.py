@@ -1,8 +1,8 @@
 import os
 from typing import Optional
 
-import lxml.html
 import lxml.etree
+import lxml.html
 
 from hocr_parser.hocr_document import HOCRDocument
 from hocr_parser.hocr_node import HOCRNode
@@ -15,9 +15,11 @@ class BaseTestClass:
         pwd = os.path.dirname(os.path.abspath(__file__))
         return os.path.join(pwd, "testdata", filename)
 
-    def get_document(self, filename: str, encoding: str = "utf-8") -> HOCRDocument:
-        filepath = self.get_testfile_path(filename)
-        return HOCRDocument(filepath, encoding=encoding)
+    def get_document(self, data: str, encoding: str = "utf-8", is_file: bool = True) -> HOCRDocument:
+        if is_file:
+            data = self.get_testfile_path(data)
+        return HOCRDocument(data, encoding=encoding, is_file=is_file)
+
 
     def get_body(self, filename: str) -> Optional[HOCRNode]:
         document = self.get_document(filename)
